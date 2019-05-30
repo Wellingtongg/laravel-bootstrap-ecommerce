@@ -108,6 +108,8 @@
                     </div>
                 </div>
 
+                <p>&nbsp;</p>
+
                 <div class="card-deck">
                     <div class="card">
                         <img class="card-img-top" src="images/7.jpg" alt="Imagem de capa do card">
@@ -160,7 +162,7 @@
 @endsection
 
 <style>
-    body .container {
+    main .container {
         max-width: 100%;
         padding: 0;
     }
