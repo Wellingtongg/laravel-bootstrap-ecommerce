@@ -60,7 +60,29 @@
 
         <p>&nbsp;</p>
         
-        <div class="col-md-12">
+        <div class="row">
+            <div class="container-fluid">
+                <div class="card-deck">
+                    @foreach($registros as $registro)
+                        <div class="col-md-3 mt-4">
+                            <div class="card">
+                                <img class="card-img-top" src="{{ $registro->imagem }}">
+                                <div class="card-body">
+                                    <h5 class="card-title" title="{{ $registro->nome }}">{{ $registro->nome }}</h5>
+                                    <p><b>R$ <span class="text-success">{{ number_format($registro->valor, 2, ',', '.') }}</span></b></p>
+                                    <p class="card-text">{{ $registro->descricao }}</p>
+                                    <div class="text-center">
+                                        <a class="btn btn-primary" href="{{ route('produto', $registro->id) }}">Veja mais informações</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <!--<div class="col-md-12">
             <div class="container-fluid">
                 <div class="card-deck">
                     <div class="card">
@@ -156,7 +178,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>
 @endsection
