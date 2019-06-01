@@ -15,13 +15,16 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+            integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+            crossorigin="anonymous"></script>
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     Loja Online
@@ -81,6 +84,22 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+        <footer class="text-white bg-dark py-5">
+            
+        </footer>
     </div>
 </body>
 </html>
+
+<script>
+    jQuery(document).ready(function() {
+        var windowHeight = jQuery(window).height();
+        var contentHeight = jQuery('#app').height();
+
+        if (windowHeight > contentHeight) {
+            jQuery('footer').css('marginTop', windowHeight - contentHeight);
+        }
+        console.log(windowHeight, contentHeight);
+    });        
+</script>
