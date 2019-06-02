@@ -18,8 +18,18 @@
             @php
                 $total_pedido = 0;
             @endphp
-            @foreach ($pedido->pedido_produtos as $pedido_produto)
-                <table class="py-2 mt-2 align-items-center text-center" width="100%">
+            <table class="py-2 mt-2 align-items-center text-center" width="100%">
+                <thead>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Valor Unitário</th>
+                        <th class="text-right">Valor Total</td>
+                    <tr>
+                </thead>
+                <tbody>
+                @foreach ($pedido->pedido_produtos as $pedido_produto)
                     <tr>
                         <td width="5%">
                             <a class="mr-2" href="#" onclick="carrinhoRemoverProduto({{ $pedido->id }}, {{ $pedido_produto->produto_id }}, 0)">
@@ -33,7 +43,6 @@
                             <div class="pl-2 text-left">{{ $pedido_produto->produto->nome }}</div>
                         </td>
                         <td width="10%">
-                            <div class="pb-2"><b>Quantidade</b></div>
                             <div>
                                 <a class="" href="#" onclick="carrinhoRemoverProduto({{ $pedido->id }}, {{ $pedido_produto->produto_id }}, 1 )">
                                     <i class="fas fa-minus-circle" style="font-size: 20px;"></i>
@@ -45,7 +54,6 @@
                             </div>
                         </td>
                         <td width="10%">
-                            <div class="pb-2"><b>Valor unitário</b></div>
                             R$ {{ number_format($pedido_produto->produto->valor, 2, ',', '.') }}
                         </td>
                         @php
@@ -53,12 +61,12 @@
                             $total_pedido += $total_produto;
                         @endphp
                         <td class="text-right" width="10%">
-                            <div class="pb-2"><b>Valor Total</b></div>
                             R$ {{ number_format($total_produto, 2, ',', '.') }}
                         </td>
                     </tr>
-                </table>
-            @endforeach
+                @endforeach
+                </tbody>
+            </table>
             <div class="text-right mt-3">
                 <b>Total do pedido:</b>
                 <span>&nbsp;R$ {{ number_format($total_pedido, 2, ',', '.') }}</span>
