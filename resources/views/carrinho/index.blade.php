@@ -48,12 +48,8 @@
                             <div class="pb-2"><b>Valor unitário</b></div>
                             R$ {{ number_format($pedido_produto->produto->valor, 2, ',', '.') }}
                         </td>
-                        <td width="10%">
-                            <div class="pb-2"><b>Descontos</b></div>
-                            R$ {{ number_format($pedido_produto->descontos, 2, ',', '.') }}
-                        </td>
                         @php
-                            $total_produto = $pedido_produto->valores - $pedido_produto->descontos;
+                            $total_produto = $pedido_produto->valores;
                             $total_pedido += $total_produto;
                         @endphp
                         <td class="text-right" width="10%">
