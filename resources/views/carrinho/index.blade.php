@@ -1,95 +1,89 @@
-﻿@extends('layout')
-@section('pagina_titulo', 'Carrinho' )
+﻿@extends('layouts.app')
 
-@section('pagina_conteudo')
-
+@section('content')
 <div class="container">
-    <div class="row">
-        <h3>Produtos no carrinho</h3>
-        <hr/>
-        @if (Session::has('mensagem-sucesso'))
-            <div class="card-panel green">
-                <strong>{{ Session::get('mensagem-sucesso') }}</strong>
-            </div>
-        @endif
-        @if (Session::has('mensagem-falha'))
-            <div class="card-panel red">
-                <strong>{{ Session::get('mensagem-falha') }}</strong>
-            </div>
-        @endif
+    <h3>Produtos no carrinho</h3>
+    @if (Session::has('mensagem-sucesso'))
+        <div class="alert alert-success">
+            <strong>{{ Session::get('mensagem-sucesso') }}</strong>
+        </div>
+    @endif
+    @if (Session::has('mensagem-falha'))
+        <div class="alert alert-danger">
+            <strong>{{ Session::get('mensagem-falha') }}</strong>
+        </div>
+    @endif
+    <div class="border rounded p-4">
         @forelse ($pedidos as $pedido)
-            <h5 class="col l6 s12 m6"> Pedido: {{ $pedido->id }} </h5>
-            <h5 class="col l6 s12 m6"> Criado em: {{ $pedido->created_at->format('d/m/Y H:i') }} </h5>
-            <table>
-                <thead>
+            @php
+                $total_pedido = 0;
+            @endphp
+            @foreach ($pedido->pedido_produtos as $pedido_produto)
+                <table class="py-2 mt-2 align-items-center text-center" width="100%">
                     <tr>
-                        <th></th>
-                        <th>Qtd</th>
-                        <th>Produto</th>
-                        <th>Valor Unit.</th>
-                        <th>Desconto(s)</th>
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php
-                        $total_pedido = 0;
-                    @endphp
-                    @foreach ($pedido->pedido_produtos as $pedido_produto)
-
-                    <tr>
-                        <td>
-                            <img width="100" height="100" src="{{ $pedido_produto->produto->imagem }}">
+                        <td width="5%">
+                            <a class="mr-2" href="#" onclick="carrinhoRemoverProduto({{ $pedido->id }}, {{ $pedido_produto->produto_id }}, 0)">
+                                <i class="fas fa-times-circle" style="font-size: 20px;"></i>
+                            </a>
                         </td>
-                        <td class="center-align">
-                            <div class="center-align">
-                                <a class="col l4 m4 s4" href="#" onclick="carrinhoRemoverProduto({{ $pedido->id }}, {{ $pedido_produto->produto_id }}, 1 )">
-                                    <i class="material-icons small">remove_circle_outline</i>
+                        <td width="150px">
+                            <img width="150px" height="100px" src="{{ $pedido_produto->produto->imagem }}">
+                        </td>
+                        <td>
+                            <div class="pl-2 text-left">{{ $pedido_produto->produto->nome }}</div>
+                        </td>
+                        <td width="10%">
+                            <div class="pb-2"><b>Quantidade</b></div>
+                            <div>
+                                <a class="" href="#" onclick="carrinhoRemoverProduto({{ $pedido->id }}, {{ $pedido_produto->produto_id }}, 1 )">
+                                    <i class="fas fa-minus-circle" style="font-size: 20px;"></i>
                                 </a>
-                                <span class="col l4 m4 s4"> {{ $pedido_produto->qtd }} </span>
-                                <a class="col l4 m4 s4" href="#" onclick="carrinhoAdicionarProduto({{ $pedido_produto->produto_id }})">
-                                    <i class="material-icons small">add_circle_outline</i>
+                                <span class=""> {{ $pedido_produto->qtd }} </span>
+                                <a class="" href="#" onclick="carrinhoAdicionarProduto({{ $pedido_produto->produto_id }})">
+                                    <i class="fas fa-plus-circle" style="font-size: 20px;"></i>
                                 </a>
                             </div>
-                            <a href="#" onclick="carrinhoRemoverProduto({{ $pedido->id }}, {{ $pedido_produto->produto_id }}, 0)" class="tooltipped" data-position="right" data-delay="50" data-tooltip="Retirar produto do carrinho?">Retirar produto</a>
                         </td>
-                        <td> {{ $pedido_produto->produto->nome }} </td>
-                        <td>R$ {{ number_format($pedido_produto->produto->valor, 2, ',', '.') }}</td>
-                        <td>R$ {{ number_format($pedido_produto->descontos, 2, ',', '.') }}</td>
+                        <td width="10%">
+                            <div class="pb-2"><b>Valor unitário</b></div>
+                            R$ {{ number_format($pedido_produto->produto->valor, 2, ',', '.') }}
+                        </td>
+                        <td width="10%">
+                            <div class="pb-2"><b>Descontos</b></div>
+                            R$ {{ number_format($pedido_produto->descontos, 2, ',', '.') }}
+                        </td>
                         @php
                             $total_produto = $pedido_produto->valores - $pedido_produto->descontos;
                             $total_pedido += $total_produto;
                         @endphp
-                        <td>R$ {{ number_format($total_produto, 2, ',', '.') }}</td>
+                        <td class="text-right" width="10%">
+                            <div class="pb-2"><b>Valor Total</b></div>
+                            R$ {{ number_format($total_produto, 2, ',', '.') }}
+                        </td>
                     </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div class="row">
-                <strong class="col offset-l6 offset-m6 offset-s6 l4 m4 s4 right-align">Total do pedido: </strong>
-                <span class="col l2 m2 s2">R$ {{ number_format($total_pedido, 2, ',', '.') }}</span>
+                </table>
+            @endforeach
+            <div class="text-right mt-3">
+                <b>Total do pedido:</b>
+                <span>&nbsp;R$ {{ number_format($total_pedido, 2, ',', '.') }}</span>
             </div>
-            <div class="row">
-                <form method="POST" action="{{ route('carrinho.desconto') }}">
-                    {{ csrf_field() }}
-                    <input type="hidden" name="pedido_id" value="{{ $pedido->id }}">
-                    <strong class="col s4 m4 l3 offset-l4 right-align">Cupom de desconto: </strong>
-                    <input class="col s6 m6 l3" type="text" name="cupom">
-                    <button class="btn-flat btn-large col s2 m2 l2">Validar</button>
-                </form>
-            </div>
-            <div class="row">
-                <a class="btn-large tooltipped col l4 s4 m4 offset-l2 offset-s2 offset-m2" data-position="top" data-delay="50" data-tooltip="Voltar a página inicial para continuar comprando?" href="{{ route('index') }}">Continuar comprando</a>
+            <div class="d-flex justify-content-end mt-3">
+                <a class="btn btn-primary btn-lg mr-5" href="{{ route('index') }}">
+                    Continuar comprando
+                </a>
                 <form method="POST" action="{{ route('carrinho.concluir') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="pedido_id" value="{{ $pedido->id }}">
-                    <button type="submit" class="btn-large blue col offset-l1 offset-s1 offset-m1 l5 s5 m5 tooltipped" data-position="top" data-delay="50" data-tooltip="Adquirir os produtos concluindo a compra?">
+                    <button type="submit" class="btn btn-success btn-lg">
                         Concluir compra
                     </button>   
                 </form>
             </div>
         @empty
             <h5>Não há nenhum pedido no carrinho</h5>
+            <a class="btn btn-primary btn-lg mr-5" href="{{ route('index') }}">
+                Voltar para loja
+            </a>
         @endforelse
     </div>
 </div>
@@ -106,8 +100,5 @@
     <input type="hidden" name="id">
 </form>
 
-@push('scripts')
-    <script type="text/javascript" src="/js/carrinho.js"></script>
-@endpush
-
+<script type="text/javascript" src="/js/carrinho.js"></script>
 @endsection
