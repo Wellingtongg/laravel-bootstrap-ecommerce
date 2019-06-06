@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -55,7 +54,12 @@
                             @endif
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('carrinho.index') }}">Carrinho</a>
+                                <a class="nav-link container-carrinho" href="{{ route('carrinho.index') }}">
+                                    <div class="box-carrinho">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </div>
+                                    <span class="qtd-carrinho d-none">0</span>
+                                </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('carrinho.compras') }}">Minhas compras</a>
@@ -93,6 +97,43 @@
     </div>
 </body>
 </html>
+
+
+<style>
+        .box-carrinho {
+            background-color: orange;
+            border-radius: 100%;
+            color: #343a40;
+            font-size: 15px;
+            padding: 6px;
+        }
+    
+        .qtd-carrinho {
+            background-color: red;
+            border-radius: 100%;
+            color: #fff;
+            font-size: 12px;
+            font-weight: bold;
+            height: 15px;
+            line-height: 11px;
+            padding: 2px;
+            position: absolute;
+            right: 0;
+            text-align: center;
+            top: 7%;
+            width: 15px;
+        }
+
+        .container-carrinho {
+            position: relative;
+        }
+
+        @media screen and (max-width: 768px) {
+            .container-carrinho {
+            width: 29px;
+            }
+        }
+    </style>
 
 <script>
     jQuery(document).ready(function() {
