@@ -1,3 +1,20 @@
+@php
+    $qtdCarrinho = 0;
+    if (Auth::check())
+    {
+        $qtdCarrinho = App\Models\PedidoProduto::join('pedidos', 'pedidos.id', '=', 'pedido_produtos.pedido_id')
+            ->where('pedido_produtos.status', 'RE')
+            ->where('pedidos.user_id', Auth::user()->id)
+            ->count();
+    }
+
+    if ($qtdCarrinho > 0) {
+        $display = '';
+    } else {
+        $display = 'd-none';
+    }
+@endphp
+
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -58,7 +75,7 @@
                                     <div class="box-carrinho">
                                         <i class="fas fa-shopping-cart"></i>
                                     </div>
-                                    <span class="qtd-carrinho d-none">0</span>
+                                    <span class="qtd-carrinho {{ $display }}">{{ $qtdCarrinho }}</span>
                                 </a>
                             </li>
                             <li class="nav-item">

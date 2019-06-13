@@ -72,12 +72,12 @@
                 <span>&nbsp;R$ {{ number_format($total_pedido, 2, ',', '.') }}</span>
             </div>
             <div class="d-flex justify-content-end mt-3">
-                <a class="btn btn-primary btn-lg mr-5" href="{{ route('index') }}">
-                    Continuar comprando
-                </a>
                 <form method="POST" action="{{ route('carrinho.concluir') }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="pedido_id" value="{{ $pedido->id }}">
+                    <a class="btn btn-primary btn-lg mr-5" href="{{ route('index') }}">
+                        Continuar comprando
+                    </a>
                     <button type="submit" class="btn btn-success btn-lg">
                         Concluir compra
                     </button>   
